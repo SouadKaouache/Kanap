@@ -65,30 +65,55 @@ const addToCartBtn = document.getElementById("addToCart");
 let quantity = document.getElementById("quantity");
 let color = document.getElementById("colors");
 
-//Mise en place de l'écoute du clique sur le bouton "Ajouter au panier" et affectation du code à éxecuter.
-addToCartBtn.addEventListener("click", () => {
-  //Déclaration des variables pour la couleur choisie et la quantité à ajouter au panier.
-  let colorClicked = color.value;
-  let quantityClicked = Number(quantity.value);
-  //Déclaration d'une variable pour récupérer le nom de canapé.
-  let kanapName = document.getElementById("title").textContent;
-  //Création d'un objet à télécharger dans le panier
-  let element = {
-    id: kanapId,
-    color: colorClicked,
-    quantity: quantityClicked,
-    name: kanapName,
-  };
-  //Vérifier si une couleur et une quantité sont sélectionnées.
-  if (color.value !== "" && quantity.value > 0 && quantity.value <= 100) {
-    //Si les deux conditions sont réunies : ajout du produit au panier en appelant la fonction addToCart.
-    addToCart(element);
-    console.log(element);
-    alert("Vos articles ont bien été ajoutés au panier.");
-  } else {
-    //Si l'une des conditions n'est pas remplie, affichage d'une alerte redonnant les consignes à l'utilisateur.
-    alert(
-      "Veuillez séléctionner une couleur et une quantité entre 1 et 100 articles"
-    );
-  }
-});
+var element =
+  //Mise en place de l'écoute du clique sur le bouton "Ajouter au panier" et affectation du code à éxecuter.
+  addToCartBtn.addEventListener("click", () => {
+    //Déclaration des variables pour la couleur choisie et la quantité à ajouter au panier.
+    let colorClicked = color.value;
+    let quantityClicked = Number(quantity.value);
+    //Déclaration d'une variable pour récupérer le nom de canapé.
+    let kanapName = document.getElementById("title").textContent;
+    let price = document.getElementById("price").textContent;
+    //Création d'un objet à télécharger dans le panier
+    element = {
+      id: kanapId,
+      color: colorClicked,
+      quantity: quantityClicked,
+      name: kanapName,
+      price: price,
+    };
+
+    //LocalStorage
+    //Déclaration de la variable "elementLocalStorage" dans laquelle on met les clés et les valeurs qui sont dans le local storage.
+    //JSON.parse sert à convertir les données qui son en objet JS dans le localstorage au format JSON.
+    //Fonction pour ajouter dans le localstorage et éviter les répétitions
+    const addInLocalStorage = () => {
+      elementLocalStorage.push(element);
+      //Transformation au format JSON et envoie dans le localstorage dans la variable "panier".
+      localStorage.setItem("panier", JSON.stringify(elementLocalStorage));
+      console.log(elementLocalStorage);
+    };
+    let elementLocalStorage = JSON.parse(localStorage.getItem("panier"));
+    if (elementLocalStorage) {
+      addInLocalStorage();
+    } else {
+      elementLocalStorage = [];
+      addInLocalStorage();
+    }
+    //Vérifier si une couleur et une quantité sont sélectionnées.
+    if (color.value !== "" && quantity.value > 0 && quantity.value <= 100) {
+      //Si les deux conditions sont réunies : ajout du produit au panier en appelant la fonction addToCart.
+      if (
+        window.confirm(
+          `Vous avez ajoutez ${quantityClicked} ${kanapName} ${colorClicked} à votre panier. OK pour consulter le panier ou ANNULER pour continuer vos achats.`
+        )
+      ) {
+        window.location.href = "http://127.0.0.1:5500/front/html/cart.html";
+      }
+    } else {
+      //Si l'une des conditions n'est pas remplie, affichage d'une alerte redonnant les consignes à l'utilisateur.
+      alert(
+        "Veuillez sélectionner une couleur ET une quantité entre 1 et 100 articles"
+      );
+    }
+  });
