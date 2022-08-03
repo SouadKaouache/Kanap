@@ -68,6 +68,7 @@ let color = document.getElementById("colors");
 var element =
   //Mise en place de l'écoute du clique sur le bouton "Ajouter au panier" et affectation du code à éxecuter.
   addToCartBtn.addEventListener("click", () => {
+    let elementLocalStorage = [];
     //Déclaration des variables pour la couleur choisie et la quantité à ajouter au panier.
     let colorClicked = color.value;
     let quantityClicked = Number(quantity.value);
@@ -83,17 +84,13 @@ var element =
       price: price,
     };
 
-    //LocalStorage
-    //Déclaration de la variable "elementLocalStorage" dans laquelle on met les clés et les valeurs qui sont dans le local storage.
-    //JSON.parse sert à convertir les données qui son en objet JS dans le localstorage au format JSON.
-    //Fonction pour ajouter dans le localstorage et éviter les répétitions
     const addInLocalStorage = () => {
       elementLocalStorage.push(element);
       //Transformation au format JSON et envoie dans le localstorage dans la variable "panier".
       localStorage.setItem("panier", JSON.stringify(elementLocalStorage));
       console.log(elementLocalStorage);
     };
-    let elementLocalStorage = JSON.parse(localStorage.getItem("panier"));
+    elementLocalStorage = JSON.parse(localStorage.getItem("panier"));
     if (elementLocalStorage) {
       addInLocalStorage();
     } else {
