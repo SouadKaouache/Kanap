@@ -58,59 +58,41 @@ fetch(`http://localhost:3000/api/products/${kanapId}`)
 
 //PARTIE ACHAT
 
-//Récupération du bouton "addToCart" et affectation dans une constante nommée "addToCartBtn".
-const addToCartBtn = document.getElementById("addToCart");
+// Récupération du bouton "addToCart" et affectation dans une constante nommée "addToCartBtn".
 
-//Récupération des éléments ayant pour Id "quantity" et "colors" et affectation des variables "quantity" et "color".
+// Récupération des éléments ayant pour Id "quantity" et "colors" et affectation des variables "quantity" et "color".
 let quantity = document.getElementById("quantity");
 let color = document.getElementById("colors");
 
-var element =
-  //Mise en place de l'écoute du clique sur le bouton "Ajouter au panier" et affectation du code à éxecuter.
-  addToCartBtn.addEventListener("click", () => {
-    let elementLocalStorage = [];
-    //Déclaration des variables pour la couleur choisie et la quantité à ajouter au panier.
-    let colorClicked = color.value;
-    let quantityClicked = Number(quantity.value);
-    //Déclaration d'une variable pour récupérer le nom de canapé.
-    let kanapName = document.getElementById("title").textContent;
-    let price = document.getElementById("price").textContent;
-    //Création d'un objet à télécharger dans le panier
-    element = {
-      id: kanapId,
-      color: colorClicked,
-      quantity: quantityClicked,
-      name: kanapName,
-      price: price,
-    };
+//Mise en place de l'écoute du clique sur le bouton "Ajouter au panier" et affectation du code à éxecuter.
 
-    const addInLocalStorage = () => {
-      elementLocalStorage.push(element);
-      //Transformation au format JSON et envoie dans le localstorage dans la variable "panier".
-      localStorage.setItem("panier", JSON.stringify(elementLocalStorage));
-      console.log(elementLocalStorage);
-    };
-    elementLocalStorage = JSON.parse(localStorage.getItem("panier"));
-    if (elementLocalStorage) {
-      addInLocalStorage();
-    } else {
-      elementLocalStorage = [];
-      addInLocalStorage();
+const addToCartBtn = document.getElementById("addToCart");
+addToCartBtn.addEventListener("click", () => {
+  //Déclaration des variables pour la couleur choisie et la quantité à ajouter au panier.
+  let colorClicked = color.value;
+  let quantityClicked = Number(quantity.value);
+  //Déclaration d'une variable pour récupérer le nom de canapé.
+  let kanapName = document.getElementById("title").textContent;
+  //Création d'un objet à télécharger dans le panier
+  var product = {
+    id: kanapId,
+    color: colorClicked,
+    quantity: quantityClicked,
+    name: kanapName,
+  };
+  if (color.value !== "" && quantity.value > 0 && quantity.value <= 100) {
+    addBasket(product);
+    if (
+      window.confirm(
+        `Vous avez ajoutez ${quantityClicked} ${kanapName} ${colorClicked} à votre panier. OK pour consulter le panier ou ANNULER pour continuer vos achats.`
+      )
+    ) {
+      window.location.href = "http://127.0.0.1:5500/front/html/cart.html";
     }
-    //Vérifier si une couleur et une quantité sont sélectionnées.
-    if (color.value !== "" && quantity.value > 0 && quantity.value <= 100) {
-      //Si les deux conditions sont réunies : ajout du produit au panier en appelant la fonction addToCart.
-      if (
-        window.confirm(
-          `Vous avez ajoutez ${quantityClicked} ${kanapName} ${colorClicked} à votre panier. OK pour consulter le panier ou ANNULER pour continuer vos achats.`
-        )
-      ) {
-        window.location.href = "http://127.0.0.1:5500/front/html/cart.html";
-      }
-    } else {
-      //Si l'une des conditions n'est pas remplie, affichage d'une alerte redonnant les consignes à l'utilisateur.
-      alert(
-        "Veuillez sélectionner une couleur ET une quantité entre 1 et 100 articles"
-      );
-    }
-  });
+  } else {
+    //Si l'une des conditions n'est pas remplie, affichage d'une alerte redonnant les consignes à l'utilisateur.
+    alert(
+      "Veuillez sélectionner une couleur ET une quantité entre 1 et 100 articles"
+    );
+  }
+});
