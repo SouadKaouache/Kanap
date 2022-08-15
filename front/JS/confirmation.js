@@ -5,4 +5,4 @@ let params = new URL(document.location).searchParams;
 document.getElementById("orderId").textContent = params.get("id");
 
 // Suppression du localstorage afin de ne conserver aucune donnée une fois la commande confirmée. //
-// localStorage.clear();
+localStorage.clear();

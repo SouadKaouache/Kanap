@@ -6,7 +6,6 @@ console.log(basket);
 const basketList = document.getElementById("cart__items");
 const basketHeader = document.querySelector("h1");
 const total = document.querySelector(".cart__price p");
-const basketform = document.querySelector(".cart__order");
 let totalQuantity = document.getElementById("totalQuantity");
 let totalPrice = document.getElementById("totalPrice");
 let totalBasketPrice = 0;
@@ -17,7 +16,6 @@ for (let product of basket) {
   var kanapId = product.id;
   let kanapColor = product.color;
   let kanapQuantity = product.quantity;
-  let kanapName = product.name;
   //Envoi d'une requête HTTP à l'API grâce à un FETCH pour récupérer les détails du panier.//
   fetch(`http://localhost:3000/api/products/${kanapId}`)
     //Envoi de la réponse en format JSON.//
@@ -58,7 +56,7 @@ for (let product of basket) {
 
           // Création de l'élément kanapName, insertion du texte et définition de productContentDescription comme étant son parent. //
           let kanapName = document.createElement("h2");
-          kanapName.textContent = kanap.Name;
+          kanapName.textContent = kanap.name;
           productContentDescription.appendChild(kanapName);
 
           // Création de l'élément kanapColorClicked, insertion de la couleur choisie précédemment et définition de productContentDescription comme étant son parent. //
@@ -160,7 +158,7 @@ if (basket.length === 0) {
   total.innerHTML =
     '<a href="./index.html">Jetez un oeil à notre éventail de produits.</a>';
   total.style.textAlign = "center";
-  total.style.fontSize = "35px";
+  total.style.fontSize = "25px";
 }
 
 /*************************************GESTION DU FORMULAIRE*************************************/
@@ -168,24 +166,42 @@ if (basket.length === 0) {
 // Récupération et mise en place de l'écoute du clic sur le bouton "commander" qui soumet également le formulaire.//
 const form = document.querySelector(".cart__order__form");
 const orderButton = document.querySelector("#order");
+
+form.firstName.setAttribute("pattern", "[a-zA-Zàâéèëêïîôùüç -]{2,60}");
 form.firstName.addEventListener("input", () => {
   firstNameRegex(form.firstName);
 });
+
+form.lastName.setAttribute("pattern", "[a-zA-Zàâéèëêïîôùüç -]{2,60}");
 form.lastName.addEventListener("input", () => {
   lastNameRegex(form.lastName);
 });
+
+form.address.setAttribute("pattern", "[0-9]{0,4}[a-zA-Zàâéèëêïîôùüç -]{2,150}");
 form.address.addEventListener("input", () => {
   addressRegex(form.address);
 });
+
+form.city.setAttribute("pattern", "[a-zA-Zàâéèëêïîôùüç -]{2,60}");
 form.city.addEventListener("input", () => {
   cityRegex(form.city);
 });
+
+form.email.setAttribute(
+  "pattern",
+  "[a-z0-9.-_]+[@]{1}[a-z0-9.-_]+[.]{1}[a-z]{2,10}"
+);
 form.email.addEventListener("input", () => {
   emailRegex(form.email);
 });
-orderButton.addEventListener("click", (e) => submitForm(e));
-function submitForm(e) {
-  e.preventDefault();
+
+let products = [];
+getIdsFromCache();
+localStorage.setItem("products", JSON.stringify(products));
+
+form.addEventListener("submit", () => submitForm());
+
+function submitForm() {
   let contact = {
     firstName: form.firstName.value,
     lastName: form.lastName.value,
@@ -193,34 +209,35 @@ function submitForm(e) {
     address: form.address.value,
     email: form.email.value,
   };
-  products = getIdsFromCache();
   localStorage.setItem("contact", JSON.stringify(contact));
-  localStorage.setItem("products", JSON.stringify(products));
-  fetch("http://localhost:3000/api/products/order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ contact, products }),
-  })
-    .then((response) => response.json())
-    // Définition du nom de la réponse donnée par l'API. //
-    .then((orderFinalization) => {
-      console.log("Formulaire soumis");
-      // Récupération de l'id de commande afin de l'utiliser pour la confirmation. //
-      let orderId = orderFinalization.orderId;
-      console.log(orderId);
-      if (orderId) {
-        // Redirection vers la page de confirmation. //
-        window.location.href = `./confirmation.html?id=${orderId}`;
-        // Suppression du localStorage. //
-        // clearCart();
-      } else {
-        alert(
-          "Veuillez vous assurez d'avoir correctement renseigner le formulaire avant de finaliser votre commande."
-        );
-      }
+
+  if (products.length === 0) {
+    alert("Votre panier est vide, vous ne pouvez pas valider la commande");
+    localStorage.clear();
+  } else {
+    fetch("http://localhost:3000/api/products/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ contact, products }),
     })
-    .catch((error) => {
-      // Log de l'erreur afin de situer la source d'un éventuel échec d'envoi du formulaire. //
-      console.log("Echec envoi formulaire" + error);
-    });
+      .then((response) => response.json())
+      // Définition du nom de la réponse donnée par l'API. //
+      .then((orderFinalization) => {
+        console.log("Formulaire soumis");
+        // Récupération de l'id de commande afin de l'utiliser pour la confirmation. //
+        let orderId = orderFinalization.orderId;
+        console.log(orderId);
+        if (orderId) {
+          // Redirection vers la page de confirmation. //
+          window.location.href = `./confirmation.html?id=${orderId}`;
+          // Suppression du localStorage. //
+        } else {
+          alert("Problème récupération API n commande");
+        }
+      })
+      .catch((error) => {
+        // Log de l'erreur afin de situer la source d'un éventuel échec d'envoi du formulaire. //
+        console.log("Echec envoi formulaire" + error);
+      });
+  }
 }
