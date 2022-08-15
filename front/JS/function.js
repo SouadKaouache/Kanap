@@ -131,7 +131,7 @@ function addressRegex(input) {
   }
 }
 
-// Fonction qui vérifie le regex de l'email. //
+// Fonction qui vérifie le regex de l'email.//
 function emailRegex(input) {
   let emailRegExp = /^[a-z0-9.-_]+[@]{1}[a-z0-9.-_]+[.]{1}[a-z]{2,10}$/gi;
   test = emailRegExp.test(input.value);
