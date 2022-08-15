@@ -119,7 +119,7 @@ function cityRegex(input) {
   }
 }
 
-// Fonction qui vérifie le regex de l'adresse. //
+// Fonction qui vérifie le regex de l'adresse.//
 function addressRegex(input) {
   let addressRegExp = /^[0-9]{0,4}[a-zA-Zàâéèëêïîôùüç -]{2,150}$/gi;
   let test = addressRegExp.test(input.value);
