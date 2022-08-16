@@ -60,7 +60,7 @@ function getNumberProduct() {
   return number;
 }
 
-// Fonction calculant ayant pour paramètres (product) et (quantity) qui permet de multiplier le prix d'un article par le nombre d'articles. //
+// Fonction calculant le total du panier ayant pour paramètres (product) et (quantity) qui permet de multiplier le prix d'un article par le nombre d'articles. //
 function getTotalPrice(product, quantity) {
   totalBasketPrice += product.price * quantity;
   return totalBasketPrice;
@@ -77,7 +77,7 @@ function changeTotalPrice(product, oldQuantity, newQuantity) {
   }
 }
 
-// Fonction qui créé un tableau (products) vide afin d'y envoyer les ids de tous les articles présents dans le panier. //
+// Fonction qui créé envoie dans le panier (products) les ids de tous les articles présents dans le panier. //
 function getIdsFromCache() {
   for (let product of basket) {
     products.push(product.id);
