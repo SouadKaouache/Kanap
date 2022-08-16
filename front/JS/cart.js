@@ -217,8 +217,13 @@ function submitForm() {
   } else {
     fetch("http://localhost:3000/api/products/order", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ contact, products }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contact,
+        products,
+      }),
     })
       .then((response) => response.json())
       // Définition du nom de la réponse donnée par l'API. //
