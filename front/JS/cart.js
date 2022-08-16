@@ -228,14 +228,12 @@ function submitForm() {
       .then((response) => response.json())
       // Définition du nom de la réponse donnée par l'API. //
       .then((orderFinalization) => {
-        console.log("Formulaire soumis");
         // Récupération de l'id de commande afin de l'utiliser pour la confirmation. //
         let orderId = orderFinalization.orderId;
         console.log(orderId);
         if (orderId) {
           // Redirection vers la page de confirmation. //
           window.location.href = `./confirmation.html?id=${orderId}`;
-          // Suppression du localStorage. //
         } else {
           alert(
             "Oups! Le site semble rencontrer un problème. Merci de réessayer utltérieurement."
@@ -244,7 +242,7 @@ function submitForm() {
       })
       .catch((error) => {
         // Log de l'erreur afin de situer la source d'un éventuel échec d'envoi du formulaire. //
-        console.log("Echec envoi formulaire" + error);
+        console.log("Echec envoi formulaire" + error.stack);
       });
   }
 }
