@@ -232,7 +232,9 @@ function submitForm() {
           window.location.href = `./confirmation.html?id=${orderId}`;
           // Suppression du localStorage. //
         } else {
-          alert("Problème récupération API n commande");
+          alert(
+            "Oups! Le site semble rencontrer un problème. Merci de réessayer utltérieurement."
+          );
         }
       })
       .catch((error) => {
