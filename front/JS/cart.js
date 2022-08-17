@@ -162,11 +162,12 @@ if (basket.length === 0) {
 }
 
 /*************************************GESTION DU FORMULAIRE*************************************/
-// Création de la constante body qui exécute la fonction makeRequestBody() qui va créer le corps du formulaire. //
 // Récupération et mise en place de l'écoute du clic sur le bouton "commander" qui soumet également le formulaire.//
 const form = document.querySelector(".cart__order__form");
 const orderButton = document.querySelector("#order");
 
+// Mise en place pour chaque champ du formulaire de pattern pour la correspondance des regex et limitation minimale et maximale. //
+// Pour chaque champ mise en place d'un addEventListener sur l'input afin d'appeler la fonction testant le regex du champ recherché. //
 form.firstName.setAttribute("pattern", "[a-zA-Zàâéèëêïîôùüç -]{2,60}");
 form.firstName.addEventListener("input", () => {
   firstNameRegex(form.firstName);
