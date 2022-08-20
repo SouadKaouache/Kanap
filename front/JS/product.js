@@ -1,5 +1,6 @@
 //Récupération de l'id du produit à partir de l'URL du document et restitution dans console.log pour tester si l'extraction a réussi.
 let params = new URL(document.location).searchParams;
+console.log(document.location);
 let kanapId = params.get("id");
 console.log(`Visualisation de l'id du canapé cliqué : ${kanapId}`);
 

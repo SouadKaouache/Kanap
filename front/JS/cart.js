@@ -200,9 +200,8 @@ let products = [];
 getIdsFromCache();
 localStorage.setItem("products", JSON.stringify(products));
 
-form.addEventListener("submit", () => submitForm());
-
-function submitForm() {
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
   let contact = {
     firstName: form.firstName.value,
     lastName: form.lastName.value,
@@ -231,7 +230,6 @@ function submitForm() {
       .then((orderFinalization) => {
         // Récupération de l'id de commande afin de l'utiliser pour la confirmation. //
         let orderId = orderFinalization.orderId;
-        console.log(orderId);
         if (orderId) {
           // Redirection vers la page de confirmation. //
           window.location.href = `./confirmation.html?id=${orderId}`;
@@ -246,4 +244,4 @@ function submitForm() {
         console.log("Echec envoi formulaire" + error.stack);
       });
   }
-}
+});
