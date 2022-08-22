@@ -62,8 +62,13 @@ function getNumberProduct() {
 
 // Fonction calculant le total du panier ayant pour paramètres (product) et (quantity) qui permet de multiplier le prix d'un article par le nombre d'articles. //
 function getTotalPrice(product, quantity) {
-  totalBasketPrice += product.price * quantity;
-  return totalBasketPrice;
+  if (totalBasketPrice < 0) {
+    totalBasketPrice = 0;
+    return totalBasketPrice;
+  } else {
+    totalBasketPrice += product.price * quantity;
+    return totalBasketPrice;
+  }
 }
 
 // Fonction destinée à mettre le prix du panier à jour lors de l'ajout ou de la suppression d'un article. //

@@ -121,21 +121,35 @@ for (let product of basket) {
 
           // Mise en place d'une écoute lorsque la quantité change et éxécution de la fonction changeQuantity.//
           kanapChosenQuantity.addEventListener("change", () => {
-            // Cette fonction définit la nouvelle quantité choisie et on la sauvegarde. //
-            kanapQuantity = changeQuantity(
-              product,
-              Number(kanapChosenQuantity.value)
-            );
-            // Cette fonction définit le nouveau total du panier lors d'un changement de quantité. //
-            totalPrice.textContent = changeTotalPrice(
-              kanap,
-              oldQuantity,
-              Number(kanapChosenQuantity.value)
-            );
-            // Définition de la nouvelle quantité choisie comme étant ancienne pour pouvoir la ré-utiliser dans l'événement change. //
-            oldQuantity = Number(kanapChosenQuantity.value);
-            // Récupération de la quantité totale d'articles contenue dans le panier grâce à la fonction getNumberProduct(). //
-            totalQuantity.textContent = getNumberProduct();
+            if (kanapChosenQuantity.value <= 0) {
+              alert(
+                "Veuillez saisir une quantité minimale d'un article par produit."
+              );
+              kanapChosenQuantity.value = 1;
+              document.location.reload();
+            }
+            if (kanapChosenQuantity.value > 100) {
+              alert(
+                "Veuillez saisir une quantité maximale de 100 articles par produit."
+              );
+              kanapChosenQuantity.value = 100;
+            } else {
+              // Cette fonction définit la nouvelle quantité choisie et on la sauvegarde. //
+              kanapQuantity = changeQuantity(
+                product,
+                Number(kanapChosenQuantity.value)
+              );
+              // Cette fonction définit le nouveau total du panier lors d'un changement de quantité. //
+              totalPrice.textContent = changeTotalPrice(
+                kanap,
+                oldQuantity,
+                Number(kanapChosenQuantity.value)
+              );
+              // Définition de la nouvelle quantité choisie comme étant ancienne pour pouvoir la ré-utiliser dans l'événement change. //
+              oldQuantity = Number(kanapChosenQuantity.value);
+              // Récupération de la quantité totale d'articles contenue dans le panier grâce à la fonction getNumberProduct(). //
+              totalQuantity.textContent = getNumberProduct();
+            }
           });
         })
         // Si la requête à l'API a échoué, création d'un message pour chaque produit pour informer l'utilisateur. //
